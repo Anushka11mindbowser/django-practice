@@ -1,13 +1,13 @@
-from .models import Toppings, Person, Songs
-from .serializers import ToppingSerializer, PersonSerializer, SongsSerializer
+from .models import Toppings, Person, Songs, Movies, FoodItems, Books
+from .serializers import ToppingSerializer, PersonSerializer, SongsSerializer, MovieSerializer, FoodItemsSerializer, BookSeializer
 from rest_framework.generics import GenericAPIView
 from rest_framework.generics import ListAPIView, CreateAPIView, UpdateAPIView, RetrieveAPIView, DestroyAPIView
 from rest_framework.mixins import ListModelMixin, CreateModelMixin, UpdateModelMixin, RetrieveModelMixin, DestroyModelMixin
 from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework.authentication import BasicAuthentication
-from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly, AllowAny, IsAdminUser
+from rest_framework.authentication import BasicAuthentication, SessionAuthentication
+from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly, AllowAny, IsAdminUser, DjangoModelPermissions, DjangoModelPermissionsOrAnonReadOnly
 
 #Class Based View Implementation
 
@@ -122,7 +122,7 @@ class ToppingsViewSet(viewsets.ViewSet):
 
 class ToppingsModelViewSet(viewsets.ModelViewSet):
     authentication_classes = [BasicAuthentication]
-    permission_classes = [IsAuthenticatedOrReadOnly]
+    permission_classes = [IsAdminUser]
     queryset = Toppings.objects.all()
     serializer_class = ToppingSerializer
 
@@ -144,7 +144,25 @@ class PersonModelViewSet(viewsets.ModelViewSet):
 
 class SongDemo(viewsets.ModelViewSet):
     authentication_classes = [BasicAuthentication]
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
     queryset = Songs.objects.all()
     serializer_class = SongsSerializer
 
+
+class ModelMovies(viewsets.ModelViewSet):
+    authentication_classes = [SessionAuthentication]
+    permission_classes = [IsAuthenticatedOrReadOnly]
+    queryset = Movies.objects.all()
+    serializer_class = MovieSerializer
+
+class ModelFood(viewsets.ModelViewSet):
+    authentication_classes = [SessionAuthentication]
+    permission_classes = [DjangoModelPermissions]
+    queryset = FoodItems.objects.all()
+    serializer_class = FoodItemsSerializer
+
+class ModelBook(viewsets.ModelViewSet):
+    authentication_classes = [SessionAuthentication]
+    permission_classes = [DjangoModelPermissionsOrAnonReadOnly]
+    queryset = Books.objects.all()
+    serializer_class = BookSeializer

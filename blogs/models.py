@@ -43,3 +43,22 @@ class Person(models.Model):
     city = models.CharField(max_length=200)
     state = models.CharField(max_length=200)
     country = models.CharField(max_length=200)
+
+class Movies(models.Model):
+    m_id = models.CharField(max_length=200)
+    m_name = models.CharField(max_length=200)
+    m_director = models.CharField(max_length=200)
+    m_rd = models.DateField()
+    m_genre = models.CharField(max_length=200)
+
+
+class FoodItems(models.Model):
+    f_id = models.CharField(max_length=200)
+    f_name = models.CharField(max_length=200)
+
+class Books(models.Model):
+    b_id = models.CharField(max_length=200)
+    b_name = models.CharField(max_length=200)
+    b_author = models.CharField(max_length=200)
+    b_genre = models.CharField(max_length=200)
+

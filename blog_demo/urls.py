@@ -29,6 +29,10 @@ router.register('toppingsmodelviewset',views.ToppingsModelViewSet, basename= 'mo
 router.register('readonlytoppings',views.ReadOnlyToppings, basename='readonlytoppings')
 router.register('personmodelviewset',views.PersonModelViewSet, basename='personmodelviewset')
 router.register('songs', views.SongDemo, basename='songmodel')
+router.register('movies', views.ModelMovies, basename='modelmovies')
+router.register('food_items', views.ModelFood, basename='fooditems')
+router.register('books', views.ModelBook, basename='books')
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     #path('toppings_details/',views.toppings_details),
@@ -47,9 +51,10 @@ urlpatterns = [
     path('ctr/<int:pk>', views.ToppingsRetrieveView.as_view(), name = 'ctr'),
     path('ctd/<int:pk>', views.ToppingsDeleteView.as_view(),name = 'ctd'),
     path('',include(router.urls)),
-    path('',include(router.urls)),
-    path('', include(router.urls)),
-    path('',include(router.urls))
+    path('auth/', include('rest_framework.urls', namespace='rest_framework'))
+    # path('',include(router.urls)),
+    # path('', include(router.urls)),
+    # path('',include(router.urls))
 ]
 
 
