@@ -18,6 +18,8 @@ from django.urls import path, include
 from blogs import views
 from rest_framework.routers import DefaultRouter
 
+
+
 router = DefaultRouter()
 # router1 = DefaultRouter()
 
@@ -25,6 +27,8 @@ router = DefaultRouter()
 router.register('toppingviewset',views.ToppingsViewSet, basename='topping')
 router.register('toppingsmodelviewset',views.ToppingsModelViewSet, basename= 'modeltopping')
 router.register('readonlytoppings',views.ReadOnlyToppings, basename='readonlytoppings')
+router.register('personmodelviewset',views.PersonModelViewSet, basename='personmodelviewset')
+router.register('songs', views.SongDemo, basename='songmodel')
 urlpatterns = [
     path('admin/', admin.site.urls),
     #path('toppings_details/',views.toppings_details),
@@ -44,7 +48,8 @@ urlpatterns = [
     path('ctd/<int:pk>', views.ToppingsDeleteView.as_view(),name = 'ctd'),
     path('',include(router.urls)),
     path('',include(router.urls)),
-    path('', include(router.urls))
+    path('', include(router.urls)),
+    path('',include(router.urls))
 ]
 
 

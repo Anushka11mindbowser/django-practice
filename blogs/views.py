@@ -1,11 +1,13 @@
-from .models import Toppings
-from .serializers import ToppingSerializer
+from .models import Toppings, Person, Songs
+from .serializers import ToppingSerializer, PersonSerializer, SongsSerializer
 from rest_framework.generics import GenericAPIView
 from rest_framework.generics import ListAPIView, CreateAPIView, UpdateAPIView, RetrieveAPIView, DestroyAPIView
 from rest_framework.mixins import ListModelMixin, CreateModelMixin, UpdateModelMixin, RetrieveModelMixin, DestroyModelMixin
 from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.authentication import BasicAuthentication
+from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly, AllowAny, IsAdminUser
 
 #Class Based View Implementation
 
@@ -119,12 +121,30 @@ class ToppingsViewSet(viewsets.ViewSet):
 #ModelViewsets
 
 class ToppingsModelViewSet(viewsets.ModelViewSet):
+    authentication_classes = [BasicAuthentication]
+    permission_classes = [IsAuthenticatedOrReadOnly]
     queryset = Toppings.objects.all()
     serializer_class = ToppingSerializer
+
 
 #Read Only Model Viewsets
 
 class ReadOnlyToppings(viewsets.ReadOnlyModelViewSet):
     queryset = Toppings.objects.all()
     serializer_class = ToppingSerializer
+
+
+class PersonModelViewSet(viewsets.ModelViewSet):
+    queryset = Person.objects.all()
+    serializer_class = PersonSerializer
+    authentication_classes = [BasicAuthentication]
+    permission_classes = [IsAuthenticated]
+
+
+
+class SongDemo(viewsets.ModelViewSet):
+    authentication_classes = [BasicAuthentication]
+    permission_classes = [IsAuthenticated]
+    queryset = Songs.objects.all()
+    serializer_class = SongsSerializer
 

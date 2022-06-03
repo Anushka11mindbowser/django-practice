@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Person, Toppings
+from .models import Person, Toppings, Songs
 class ToppingSerializer(serializers.ModelSerializer):
     topping_name = serializers.CharField(max_length=200)
     class Meta:
@@ -20,4 +20,16 @@ class PersonSerializer(serializers.Serializer):
 
     def person_create(self, validate_data):
         return Person.objects.create(**validate_data)
+
+class SongsSerializer(serializers.Serializer):
+    s_id = serializers.CharField(max_length=200)
+    s_name = serializers.CharField(max_length=200)
+    s_artist = serializers.CharField(max_length=200)
+    r_date = serializers.DateField()
+    s_genre = serializers.CharField(max_length=200)
+    class Meta():
+        model = Songs
+        fields = '__all__'
+    def create(self, validated_data):
+        return Songs.objects.create(**validated_data)
 
