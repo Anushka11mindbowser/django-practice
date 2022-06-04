@@ -62,3 +62,8 @@ class Books(models.Model):
     b_author = models.CharField(max_length=200)
     b_genre = models.CharField(max_length=200)
 
+class Flowers(models.Model):
+    f_id = models.CharField(max_length=200)
+    f_name = models.CharField(max_length=200)
+    def __str__(self):
+        return self.f_name

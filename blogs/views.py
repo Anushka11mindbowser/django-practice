@@ -1,13 +1,42 @@
-from .models import Toppings, Person, Songs, Movies, FoodItems, Books
-from .serializers import ToppingSerializer, PersonSerializer, SongsSerializer, MovieSerializer, FoodItemsSerializer, BookSeializer
+import io
+
+from .models import Toppings, Person, Songs, Movies, FoodItems, Books, Flowers
+from rest_framework.renderers import JSONRenderer
+from rest_framework.parsers import JSONParser
+from .serializers import ToppingSerializer, PersonSerializer, SongsSerializer, MovieSerializer, FoodItemsSerializer, BookSeializer, FlowerSerializer
 from rest_framework.generics import GenericAPIView
 from rest_framework.generics import ListAPIView, CreateAPIView, UpdateAPIView, RetrieveAPIView, DestroyAPIView
 from rest_framework.mixins import ListModelMixin, CreateModelMixin, UpdateModelMixin, RetrieveModelMixin, DestroyModelMixin
 from rest_framework import viewsets
 from rest_framework.response import Response
+from django.http import HttpResponse
+import requests
 from rest_framework import status
-from rest_framework.authentication import BasicAuthentication, SessionAuthentication
-from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly, AllowAny, IsAdminUser, DjangoModelPermissions, DjangoModelPermissionsOrAnonReadOnly
+from rest_framework.authentication import BasicAuthentication, SessionAuthentication, TokenAuthentication
+from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly,  IsAdminUser, DjangoModelPermissions, DjangoModelPermissionsOrAnonReadOnly
+from .custompermissions import MyPermission
+from django.views.decorators.csrf import csrf_exempt
+def flowers_detail(request):
+    flower = Flowers.objects.get(f_id=103)
+    serializer = FlowerSerializer(flower)
+    print(serializer.data)
+    json_data = JSONRenderer().render(serializer.data)
+    return HttpResponse(json_data, content_type='application/json')
+
+@csrf_exempt
+def detail_flower(request):
+   if request.method == 'POST':
+       json_data = request.body
+       stream = io.BytesIO(json_data)
+       python_data = JSONParser.parse(stream)
+       serializer = FlowerSerializer(data = python_data)
+       if serializer.is_valid():
+           serializer.save()
+           res = {'msg':'Deserializer Implemented'}
+           json_data = JSONRenderer().render(res)
+           return HttpResponse(json_data, content_type='application/json')
+       return HttpResponse(JSONRenderer().render(serializer.errors, content='application/json'))
+
 
 #Class Based View Implementation
 
@@ -143,8 +172,8 @@ class PersonModelViewSet(viewsets.ModelViewSet):
 
 
 class SongDemo(viewsets.ModelViewSet):
-    authentication_classes = [BasicAuthentication]
-    permission_classes = [AllowAny]
+    authentication_classes = [SessionAuthentication]
+    permission_classes = [MyPermission]
     queryset = Songs.objects.all()
     serializer_class = SongsSerializer
 
@@ -166,3 +195,9 @@ class ModelBook(viewsets.ModelViewSet):
     permission_classes = [DjangoModelPermissionsOrAnonReadOnly]
     queryset = Books.objects.all()
     serializer_class = BookSeializer
+
+class ModelFlowers(viewsets.ModelViewSet):
+    queryset = Flowers.objects.all()
+    serializer_class = FlowerSerializer
+    authentication_classes = [TokenAuthentication]
+    permission_classes = []

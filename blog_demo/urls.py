@@ -17,6 +17,7 @@ from django.contrib import admin
 from django.urls import path, include
 from blogs import views
 from rest_framework.routers import DefaultRouter
+from rest_framework.authtoken.views import obtain_auth_token
 
 
 
@@ -32,14 +33,12 @@ router.register('songs', views.SongDemo, basename='songmodel')
 router.register('movies', views.ModelMovies, basename='modelmovies')
 router.register('food_items', views.ModelFood, basename='fooditems')
 router.register('books', views.ModelBook, basename='books')
+router.register('flowers', views.ModelFlowers, basename = 'flowers')
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    #path('toppings_details/',views.toppings_details),
-    #path('pizza_details/', views.pizza_details),
-    # path('per_create/', views.person_create),
-    # path('current_datetime/',views.current_time),
-    #path('cl/', views.MyView.as_view(), name='cl'),
+    path('flower_serializer/',views.flowers_detail),
     path('tl/', views.ToppingsList.as_view(),name='tl'),
     path('tc/', views.ToppingsCreate.as_view(),name='tc'),
     path('tu/<int:pk>/', views.ToppingsUpdate.as_view(), name = 'tu'),
@@ -51,10 +50,9 @@ urlpatterns = [
     path('ctr/<int:pk>', views.ToppingsRetrieveView.as_view(), name = 'ctr'),
     path('ctd/<int:pk>', views.ToppingsDeleteView.as_view(),name = 'ctd'),
     path('',include(router.urls)),
-    path('auth/', include('rest_framework.urls', namespace='rest_framework'))
-    # path('',include(router.urls)),
-    # path('', include(router.urls)),
-    # path('',include(router.urls))
+    path('auth/', include('rest_framework.urls', namespace='rest_framework')),
+    path('gettoken/', obtain_auth_token, name = 'api_auth_token')
+
 ]
 
 

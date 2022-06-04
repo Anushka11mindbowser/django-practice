@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Person, Toppings, Songs, Movies, FoodItems, Books
+from .models import Person, Toppings, Songs, Movies, FoodItems, Books, Flowers
 
 class ToppingSerializer(serializers.ModelSerializer):
     topping_name = serializers.CharField(max_length=200)
@@ -72,3 +72,13 @@ class BookSeializer(serializers.Serializer):
     def create(self, validated_data):
         return Books.objects.create(**validated_data)
 
+class FlowerSerializer(serializers.Serializer):
+    f_id = serializers.CharField(max_length=200)
+    f_name = serializers.CharField(max_length=200)
+
+    class Meta():
+        model = Flowers
+        fields = '__all__'
+
+    def create(self, validated_data):
+        return Flowers.objects.create(**validated_data)
